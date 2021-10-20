@@ -11,9 +11,7 @@
   "scripts": {
     "/* Teams Toolkit uses dev:teamsfx for local debug (https://aka.ms/teamsfx-localdebug) */": "",
     "dev:teamsfx": "env-cmd --silent -f .env.teamsfx.local npm run dev",
-    "dev": "nodemon --inspect=9239 --signal SIGINT ./index.js",
-    "start": "node ./index.js",
-    "watch": "nodemon ./index.js"
+    "dev": "nodemon --inspect=9239 --signal SIGINT ./index.js"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -4,8 +4,7 @@
   "scripts": {
     "/* Teams Toolkit uses dev:teamsfx for local debug (https://aka.ms/teamsfx-localdebug) */": "",
     "dev:teamsfx": "env-cmd --silent -f .env.teamsfx.local npm run dev",
-    "dev": "npx func start --javascript --language-worker=\"--inspect=9229\" --port \"7071\" --cors \"*\"",
-    "start": "npx func start"
+    "dev": "npx func start --javascript --language-worker=\"--inspect=9229\" --port \"7071\" --cors \"*\""
   },
   "dependencies": {
     "@microsoft/teamsfx": "^0.2.0",

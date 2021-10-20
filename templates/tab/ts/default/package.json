@@ -27,7 +27,6 @@
     "/* Teams Toolkit uses dev:teamsfx for local debug (https://aka.ms/teamsfx-localdebug) */": "",
     "dev:teamsfx": "env-cmd --silent -f .env.teamsfx.local npm run dev",
     "dev": "react-scripts start",
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },
