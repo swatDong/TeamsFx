@@ -2,7 +2,7 @@
   "name": "teamsfx-template-api",
   "version": "1.0.0",
   "scripts": {
-    "/* Teams Toolkit uses dev:teamsfx for local debug (https://aka.ms/teamsfx-localdebug) */": "",
+    "/*Teams Toolkit uses dev:teamsfx for local debug (https://aka.ms/teamsfx-localdebug)*/": "",
     "dev:teamsfx": "env-cmd --silent -f .env.teamsfx.local npm run dev",
     "dev": "npx func start --javascript --language-worker=\"--inspect=9229\" --port \"7071\" --cors \"*\""
   },

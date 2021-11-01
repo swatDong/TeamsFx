@@ -18,7 +18,7 @@
     "env-cmd": "^10.1.0"
   },
   "scripts": {
-    "/* Teams Toolkit uses dev:teamsfx for local debug (https://aka.ms/teamsfx-localdebug) */": "",
+    "/*Teams Toolkit uses dev:teamsfx for local debug (https://aka.ms/teamsfx-localdebug)*/": "",
     "dev:teamsfx": "env-cmd --silent -f .env.teamsfx.local npm run dev",
     "dev": "react-scripts start",
     "build": "react-scripts build",
