@@ -7,8 +7,10 @@
     "dev": "npx func start --javascript --language-worker=\"--inspect=9229\" --port \"7071\" --cors \"*\""
   },
   "dependencies": {
-    "@microsoft/teamsfx": "^0.2.0",
-    "env-cmd": "^10.1.0",
+    "@microsoft/teamsfx": "^0.3.0",
     "isomorphic-fetch": "^3.0.0"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
   }
 }

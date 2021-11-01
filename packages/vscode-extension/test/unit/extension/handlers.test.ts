@@ -24,7 +24,7 @@ import { MockCore } from "./mocks/mockCore";
 import * as extension from "../../../src/extension";
 import * as accountTree from "../../../src/accountTree";
 import TreeViewManagerInstance from "../../../src/treeview/treeViewManager";
-import { CollaborationState, CoreHookContext } from "@microsoft/teamsfx-core";
+import { CollaborationState, CoreHookContext, isMultiEnvEnabled } from "@microsoft/teamsfx-core";
 
 suite("handlers", () => {
   test("getWorkspacePath()", () => {
@@ -167,7 +167,11 @@ suite("handlers", () => {
       await handlers.runCommand(Stage.debug);
 
       sinon.restore();
-      chai.expect(ignoreEnvInfo).to.not.equal(true);
+      if (isMultiEnvEnabled()) {
+        chai.expect(ignoreEnvInfo).to.equal(true);
+      } else {
+        chai.expect(ignoreEnvInfo).not.to.equal(true);
+      }
       chai.expect(localDebugCalled).equals(1);
     });
 
@@ -430,14 +434,15 @@ suite("handlers", () => {
       sinon.stub(handlers, "core").value(new MockCore());
       const sendTelemetryEvent = sinon.stub(ExtTelemetry, "sendTelemetryEvent");
       const sendTelemetryErrorEvent = sinon.stub(ExtTelemetry, "sendTelemetryErrorEvent");
-      sinon.stub(MockCore.prototype, "listAllCollaborators").resolves(
-        err({
-          name: "error",
-          source: "extensionTest",
-          message: "error",
-          stack: new Error().stack,
-          timestamp: new Date(),
-        })
+      sinon.stub(MockCore.prototype, "listAllCollaborators").returns(
+        Promise.resolve(
+          ok({
+            env: {
+              state: CollaborationState.ERROR,
+              error: err(new UserError("error", "error", "extensionTest", new Error().stack)),
+            },
+          })
+        )
       );
 
       const result = await handlers.listAllCollaborators(["env"]);

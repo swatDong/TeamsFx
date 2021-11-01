@@ -9,6 +9,8 @@ export class Constants {
   public static readonly BUILD_OR_PUBLISH_QUESTION = "build-or-publish";
   public static readonly READ_MORE = "Read more";
   public static readonly PUBLISH_GUIDE = "https://aka.ms/teamsfx-publish";
+  public static readonly TEAMS_ADMIN_PORTAL =
+    "https://admin.teams.microsoft.com/policies/manage-apps";
   public static readonly TEAMS_APP_ID = "teamsAppId";
 
   public static readonly PERMISSIONS = {
@@ -31,15 +33,20 @@ export class ErrorMessages {
  * Config keys that are useful for generating remote teams app manifest
  */
 export const REMOTE_MANIFEST = "manifest.source.json";
-export const MANIFEST_TEMPLATE = "manifest.template.json";
-export const MANIFEST_LOCAL = "manifest.local.json";
+export const MANIFEST_TEMPLATE = "manifest.remote.template.json";
+export const MANIFEST_LOCAL = "manifest.local.template.json";
 export const FRONTEND_ENDPOINT = "endpoint";
 export const FRONTEND_DOMAIN = "domain";
 export const FRONTEND_ENDPOINT_ARM = "frontendHosting_endpoint";
 export const FRONTEND_DOMAIN_ARM = "frontendHosting_domain";
 export const BOT_ID = "botId";
 export const LOCAL_BOT_ID = "localBotId";
-
+export const COLOR_TEMPLATE = "plugins/resource/appstudio/defaultIcon.png";
+export const OUTLINE_TEMPLATE = "plugins/resource/appstudio/defaultOutline.png";
+export const DEFAULT_COLOR_PNG_FILENAME = "color.png";
+export const DEFAULT_OUTLINE_PNG_FILENAME = "outline.png";
+export const MANIFEST_RESOURCES = "resources";
+export const APP_PACKAGE_FOLDER_FOR_MULTI_ENV = "templates/appPackage";
 /**
  * Config Keys that are useful for remote collaboration
  */
@@ -47,8 +54,8 @@ export const SOLUTION = "solution";
 export const SOLUTION_USERINFO = "userinfo";
 
 export const TEAMS_APP_MANIFEST_TEMPLATE = `{
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.9",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.11/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.11",
   "version": "{version}",
   "id": "{appid}",
   "packageName": "com.microsoft.teams.extension",
@@ -87,8 +94,8 @@ export const TEAMS_APP_MANIFEST_TEMPLATE = `{
 }`;
 
 export const TEAMS_APP_MANIFEST_TEMPLATE_FOR_MULTI_ENV = `{
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.9",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.11/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.11",
   "version": "1.0.0",
   "id": "{{state.fx-resource-appstudio.teamsAppId}}",
   "packageName": "com.microsoft.teams.extension",
@@ -127,8 +134,8 @@ export const TEAMS_APP_MANIFEST_TEMPLATE_FOR_MULTI_ENV = `{
 }`;
 
 export const TEAMS_APP_MANIFEST_TEMPLATE_LOCAL_DEBUG = `{
-  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.9",
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.11/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.11",
   "version": "1.0.0",
   "id": "{{localSettings.teamsApp.teamsAppId}}",
   "packageName": "com.microsoft.teams.extension",

@@ -38,7 +38,7 @@ import * as os from "os";
 import * as path from "path";
 import sinon from "sinon";
 import { Container } from "typedi";
-import { CoreHookContext, deserializeDict, serializeDict } from "../../src";
+import { CoreHookContext, serializeDict } from "../../src";
 import * as commonTools from "../../src/common/tools";
 import { environmentManager } from "../../src/core/environment";
 import { EnvInfoLoaderMW } from "../../src/core/middleware/envInfoLoader";
@@ -57,7 +57,7 @@ import {
   MockUserInteraction,
   randomAppName,
 } from "./utils";
-
+import * as dotenv from "dotenv";
 let mockedEnvRestore: () => void;
 describe("Middleware - others", () => {
   const sandbox = sinon.createSandbox();
@@ -113,7 +113,7 @@ describe("Middleware - others", () => {
       });
       sandbox.stub<any, any>(fs, "writeFile").callsFake(async (file: string, content: any) => {
         if (userDataFile === file) {
-          userData = deserializeDict(content);
+          userData = dotenv.parse(content);
         }
         if (envJsonFile === file) {
           envJson = JSON.parse(content);
@@ -632,7 +632,7 @@ describe("Middleware - others", () => {
       mockedEnvRestore = mockedEnv({
         TEAMSFX_INSIDER_PREVIEW: "true",
       });
-      sandbox.stub(MockUserInteraction.prototype, "showMessage").resolves(ok("OK"));
+      sandbox.stub(MockUserInteraction.prototype, "showMessage").resolves(ok("Upgrade"));
     });
 
     afterEach(async () => {

@@ -17,7 +17,7 @@ import { openWelcomePageAfterExtensionInstallation } from "./controls/openWelcom
 import { VsCodeUI } from "./qm/vsc_ui";
 import { exp } from "./exp";
 import { disableRunIcon, registerRunIcon } from "./debug/runIconHandler";
-import { CryptoCodeLensProvider } from "./codeLensProvider";
+import { AdaptiveCardCodeLensProvider, CryptoCodeLensProvider } from "./codeLensProvider";
 import {
   Correlator,
   isMultiEnvEnabled,
@@ -26,8 +26,13 @@ import {
 } from "@microsoft/teamsfx-core";
 import { TreatmentVariableValue, TreatmentVariables } from "./exp/treatmentVariables";
 import { enableMigrateV1 } from "./utils/migrateV1";
-import { isTeamsfx, syncFeatureFlags } from "./utils/commonUtils";
-import { ConfigFolderName, InputConfigsFolderName, StatesFolderName } from "@microsoft/teamsfx-api";
+import { canUpgradeToArmAndMultiEnv, isTeamsfx, syncFeatureFlags } from "./utils/commonUtils";
+import {
+  ConfigFolderName,
+  InputConfigsFolderName,
+  StatesFolderName,
+  AdaptiveCardsFolderName,
+} from "@microsoft/teamsfx-api";
 import { ExtensionUpgrade } from "./utils/upgrade";
 import { registerEnvTreeHandler } from "./envTree";
 import { getWorkspacePath } from "./handlers";
@@ -147,6 +152,12 @@ export async function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(openWelcomeCmd);
 
+  const checkUpgradeCmd = vscode.commands.registerCommand(
+    "fx-extension.checkProjectUpgrade",
+    (...args) => Correlator.run(handlers.checkUpgrade, args)
+  );
+  context.subscriptions.push(checkUpgradeCmd);
+
   const openSurveyCmd = vscode.commands.registerCommand("fx-extension.openSurvey", (...args) =>
     Correlator.run(handlers.openSurveyHandler, args)
   );
@@ -208,6 +219,12 @@ export async function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(decryptCmd);
 
+  const adaptiveCardCodeLensCmd = vscode.commands.registerCommand(
+    "fx-extension.OpenAdaptiveCardExt",
+    (...args) => Correlator.run(handlers.openAdaptiveCardExt, args)
+  );
+  context.subscriptions.push(adaptiveCardCodeLensCmd);
+
   const createNewEnvironment = vscode.commands.registerCommand(
     "fx-extension.addEnvironment",
     (...args) => Correlator.run(handlers.createNewEnvironment, args)
@@ -236,6 +253,24 @@ export async function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(viewEnvironmentWithIcon);
 
+  const openSubscriptionInPortal = vscode.commands.registerCommand(
+    "fx-extension.openSubscriptionInPortal",
+    (node) => {
+      const envName = node.commandId.split(".").pop();
+      Correlator.run(handlers.openSubscriptionInPortal, envName);
+    }
+  );
+  context.subscriptions.push(openSubscriptionInPortal);
+
+  const openResourceGroupInPortal = vscode.commands.registerCommand(
+    "fx-extension.openResourceGroupInPortal",
+    (node) => {
+      const envName = node.commandId.split(".").pop();
+      Correlator.run(handlers.openResourceGroupInPortal, envName);
+    }
+  );
+  context.subscriptions.push(openResourceGroupInPortal);
+
   const grantPermission = vscode.commands.registerCommand(
     "fx-extension.grantPermission",
     (node) => {
@@ -250,6 +285,12 @@ export async function activate(context: vscode.ExtensionContext) {
     "setContext",
     "fx-extension.isMultiEnvEnabled",
     isMultiEnvEnabled() && isValidProject(workspacePath)
+  );
+
+  vscode.commands.executeCommand(
+    "setContext",
+    "fx-extension.canUpgradeToArmAndMultiEnv",
+    await canUpgradeToArmAndMultiEnv(workspacePath)
   );
 
   vscode.commands.executeCommand(
@@ -274,11 +315,26 @@ export async function activate(context: vscode.ExtensionContext) {
       ? `**/.${ConfigFolderName}/${InputConfigsFolderName}/${localSettingsJsonName}`
       : ``,
   };
+
+  const adaptiveCardCodeLensProvider = new AdaptiveCardCodeLensProvider();
+  const adaptiveCardFilePattern = `**/${AdaptiveCardsFolderName}/*.json`;
+  const adaptiveCardFileSelector = {
+    language: "json",
+    scheme: "file",
+    pattern: adaptiveCardFilePattern,
+  };
+
   context.subscriptions.push(
     vscode.languages.registerCodeLensProvider(userDataSelector, codelensProvider)
   );
   context.subscriptions.push(
     vscode.languages.registerCodeLensProvider(localDebugDataSelector, codelensProvider)
+  );
+  context.subscriptions.push(
+    vscode.languages.registerCodeLensProvider(
+      adaptiveCardFileSelector,
+      adaptiveCardCodeLensProvider
+    )
   );
 
   // Register debug configuration provider
