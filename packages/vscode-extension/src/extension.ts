@@ -124,6 +124,7 @@ import {
   provisionHandler,
   publishHandler,
   scaffoldFromDeveloperPortalHandler,
+  addKnowledgeHandler,
 } from "./handlers/lifecycleHandlers";
 import {
   buildPackageHandler,
@@ -624,6 +625,13 @@ function registerTreeViewCommandsInDevelopment(context: vscode.ExtensionContext)
   registerInCommandController(context, "fx-extension.addWebpart", addWebpartHandler, "addWebpart");
 
   registerInCommandController(context, "fx-extension.addPlugin", addPluginHandler, "addPlugin");
+
+  registerInCommandController(
+    context,
+    "fx-extension.addKnowledge",
+    addKnowledgeHandler,
+    "addKnowledge"
+  );
 }
 
 function registerTreeViewCommandsInLifecycle(context: vscode.ExtensionContext) {
